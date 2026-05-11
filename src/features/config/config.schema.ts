@@ -41,6 +41,12 @@ export const SystemConfigSchema = z.object({
     })
     .optional(),
   site: SiteConfigInputSchema.optional(),
+  feature: z
+    .object({
+      commentsEnabled: z.boolean().optional(),
+      guestbookEnabled: z.boolean().optional(),
+    })
+    .optional(),
 });
 
 export const createSystemConfigFormSchema = (messages: Messages) =>
@@ -48,6 +54,7 @@ export const createSystemConfigFormSchema = (messages: Messages) =>
     email: SystemConfigSchema.shape.email,
     notification: SystemConfigSchema.shape.notification,
     site: createSiteConfigInputFormSchema(messages).optional(),
+    feature: SystemConfigSchema.shape.feature,
   });
 
 export type SystemConfig = z.infer<typeof SystemConfigSchema>;
@@ -78,6 +85,10 @@ export const DEFAULT_CONFIG: SystemConfig = {
     webhooks: [],
   },
   site: blogConfig satisfies SiteConfigInput,
+  feature: {
+    commentsEnabled: true,
+    guestbookEnabled: true,
+  },
 };
 
 export const CONFIG_CACHE_KEYS = {

@@ -1,6 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
+  BookOpen,
   FileText,
   Image as ImageIcon,
   LayoutDashboard,
@@ -101,6 +102,12 @@ export function SideBar({
       path: "/admin/friend-links",
       icon: Link2,
       label: m.admin_sidebar_friend_links(),
+      exact: false,
+    },
+    {
+      path: "/admin/guestbook",
+      icon: BookOpen,
+      label: m.admin_sidebar_guestbook(),
       exact: false,
     },
   ] satisfies Array<NavItem>;

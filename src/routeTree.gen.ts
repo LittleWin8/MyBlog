@@ -21,6 +21,7 @@ import { Route as UserProfileRouteImport } from './routes/_user/profile'
 import { Route as PublicUnsubscribeRouteImport } from './routes/_public/unsubscribe'
 import { Route as PublicSearchRouteImport } from './routes/_public/search'
 import { Route as PublicPostsRouteImport } from './routes/_public/posts'
+import { Route as PublicGuestbookRouteImport } from './routes/_public/guestbook'
 import { Route as PublicFriendLinksRouteImport } from './routes/_public/friend-links'
 import { Route as AuthVerifyEmailRouteImport } from './routes/_auth/verify-email'
 import { Route as AuthResetLinkRouteImport } from './routes/_auth/reset-link'
@@ -32,6 +33,7 @@ import { Route as AdminTagsIndexRouteImport } from './routes/admin/tags/index'
 import { Route as AdminSettingsIndexRouteImport } from './routes/admin/settings/index'
 import { Route as AdminPostsIndexRouteImport } from './routes/admin/posts/index'
 import { Route as AdminMediaIndexRouteImport } from './routes/admin/media/index'
+import { Route as AdminGuestbookIndexRouteImport } from './routes/admin/guestbook/index'
 import { Route as AdminFriendLinksIndexRouteImport } from './routes/admin/friend-links/index'
 import { Route as AdminCommentsIndexRouteImport } from './routes/admin/comments/index'
 import { Route as PublicPostSlugRouteImport } from './routes/_public/post/$slug'
@@ -94,6 +96,11 @@ const PublicPostsRoute = PublicPostsRouteImport.update({
   path: '/posts',
   getParentRoute: () => PublicRouteRoute,
 } as any)
+const PublicGuestbookRoute = PublicGuestbookRouteImport.update({
+  id: '/guestbook',
+  path: '/guestbook',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
 const PublicFriendLinksRoute = PublicFriendLinksRouteImport.update({
   id: '/friend-links',
   path: '/friend-links',
@@ -149,6 +156,11 @@ const AdminMediaIndexRoute = AdminMediaIndexRouteImport.update({
   path: '/media/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminGuestbookIndexRoute = AdminGuestbookIndexRouteImport.update({
+  id: '/guestbook/',
+  path: '/guestbook/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminFriendLinksIndexRoute = AdminFriendLinksIndexRouteImport.update({
   id: '/friend-links/',
   path: '/friend-links/',
@@ -179,6 +191,7 @@ export interface FileRoutesByFullPath {
   '/reset-link': typeof AuthResetLinkRoute
   '/verify-email': typeof AuthVerifyEmailRoute
   '/friend-links': typeof PublicFriendLinksRoute
+  '/guestbook': typeof PublicGuestbookRoute
   '/posts': typeof PublicPostsRoute
   '/search': typeof PublicSearchRoute
   '/unsubscribe': typeof PublicUnsubscribeRoute
@@ -190,6 +203,7 @@ export interface FileRoutesByFullPath {
   '/post/$slug': typeof PublicPostSlugRoute
   '/admin/comments': typeof AdminCommentsIndexRoute
   '/admin/friend-links': typeof AdminFriendLinksIndexRoute
+  '/admin/guestbook': typeof AdminGuestbookIndexRoute
   '/admin/media': typeof AdminMediaIndexRoute
   '/admin/posts/': typeof AdminPostsIndexRoute
   '/admin/settings': typeof AdminSettingsIndexRoute
@@ -203,6 +217,7 @@ export interface FileRoutesByTo {
   '/reset-link': typeof AuthResetLinkRoute
   '/verify-email': typeof AuthVerifyEmailRoute
   '/friend-links': typeof PublicFriendLinksRoute
+  '/guestbook': typeof PublicGuestbookRoute
   '/posts': typeof PublicPostsRoute
   '/search': typeof PublicSearchRoute
   '/unsubscribe': typeof PublicUnsubscribeRoute
@@ -214,6 +229,7 @@ export interface FileRoutesByTo {
   '/post/$slug': typeof PublicPostSlugRoute
   '/admin/comments': typeof AdminCommentsIndexRoute
   '/admin/friend-links': typeof AdminFriendLinksIndexRoute
+  '/admin/guestbook': typeof AdminGuestbookIndexRoute
   '/admin/media': typeof AdminMediaIndexRoute
   '/admin/posts': typeof AdminPostsIndexRoute
   '/admin/settings': typeof AdminSettingsIndexRoute
@@ -233,6 +249,7 @@ export interface FileRoutesById {
   '/_auth/reset-link': typeof AuthResetLinkRoute
   '/_auth/verify-email': typeof AuthVerifyEmailRoute
   '/_public/friend-links': typeof PublicFriendLinksRoute
+  '/_public/guestbook': typeof PublicGuestbookRoute
   '/_public/posts': typeof PublicPostsRoute
   '/_public/search': typeof PublicSearchRoute
   '/_public/unsubscribe': typeof PublicUnsubscribeRoute
@@ -244,6 +261,7 @@ export interface FileRoutesById {
   '/_public/post/$slug': typeof PublicPostSlugRoute
   '/admin/comments/': typeof AdminCommentsIndexRoute
   '/admin/friend-links/': typeof AdminFriendLinksIndexRoute
+  '/admin/guestbook/': typeof AdminGuestbookIndexRoute
   '/admin/media/': typeof AdminMediaIndexRoute
   '/admin/posts/': typeof AdminPostsIndexRoute
   '/admin/settings/': typeof AdminSettingsIndexRoute
@@ -261,6 +279,7 @@ export interface FileRouteTypes {
     | '/reset-link'
     | '/verify-email'
     | '/friend-links'
+    | '/guestbook'
     | '/posts'
     | '/search'
     | '/unsubscribe'
@@ -272,6 +291,7 @@ export interface FileRouteTypes {
     | '/post/$slug'
     | '/admin/comments'
     | '/admin/friend-links'
+    | '/admin/guestbook'
     | '/admin/media'
     | '/admin/posts/'
     | '/admin/settings'
@@ -285,6 +305,7 @@ export interface FileRouteTypes {
     | '/reset-link'
     | '/verify-email'
     | '/friend-links'
+    | '/guestbook'
     | '/posts'
     | '/search'
     | '/unsubscribe'
@@ -296,6 +317,7 @@ export interface FileRouteTypes {
     | '/post/$slug'
     | '/admin/comments'
     | '/admin/friend-links'
+    | '/admin/guestbook'
     | '/admin/media'
     | '/admin/posts'
     | '/admin/settings'
@@ -314,6 +336,7 @@ export interface FileRouteTypes {
     | '/_auth/reset-link'
     | '/_auth/verify-email'
     | '/_public/friend-links'
+    | '/_public/guestbook'
     | '/_public/posts'
     | '/_public/search'
     | '/_public/unsubscribe'
@@ -325,6 +348,7 @@ export interface FileRouteTypes {
     | '/_public/post/$slug'
     | '/admin/comments/'
     | '/admin/friend-links/'
+    | '/admin/guestbook/'
     | '/admin/media/'
     | '/admin/posts/'
     | '/admin/settings/'
@@ -426,6 +450,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicPostsRouteImport
       parentRoute: typeof PublicRouteRoute
     }
+    '/_public/guestbook': {
+      id: '/_public/guestbook'
+      path: '/guestbook'
+      fullPath: '/guestbook'
+      preLoaderRoute: typeof PublicGuestbookRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
     '/_public/friend-links': {
       id: '/_public/friend-links'
       path: '/friend-links'
@@ -503,6 +534,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminMediaIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/guestbook/': {
+      id: '/admin/guestbook/'
+      path: '/guestbook'
+      fullPath: '/admin/guestbook'
+      preLoaderRoute: typeof AdminGuestbookIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/admin/friend-links/': {
       id: '/admin/friend-links/'
       path: '/friend-links'
@@ -556,6 +594,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 
 interface PublicRouteRouteChildren {
   PublicFriendLinksRoute: typeof PublicFriendLinksRoute
+  PublicGuestbookRoute: typeof PublicGuestbookRoute
   PublicPostsRoute: typeof PublicPostsRoute
   PublicSearchRoute: typeof PublicSearchRoute
   PublicUnsubscribeRoute: typeof PublicUnsubscribeRoute
@@ -565,6 +604,7 @@ interface PublicRouteRouteChildren {
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
   PublicFriendLinksRoute: PublicFriendLinksRoute,
+  PublicGuestbookRoute: PublicGuestbookRoute,
   PublicPostsRoute: PublicPostsRoute,
   PublicSearchRoute: PublicSearchRoute,
   PublicUnsubscribeRoute: PublicUnsubscribeRoute,
@@ -609,6 +649,7 @@ interface AdminRouteRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   AdminCommentsIndexRoute: typeof AdminCommentsIndexRoute
   AdminFriendLinksIndexRoute: typeof AdminFriendLinksIndexRoute
+  AdminGuestbookIndexRoute: typeof AdminGuestbookIndexRoute
   AdminMediaIndexRoute: typeof AdminMediaIndexRoute
   AdminSettingsIndexRoute: typeof AdminSettingsIndexRoute
   AdminTagsIndexRoute: typeof AdminTagsIndexRoute
@@ -619,6 +660,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   AdminCommentsIndexRoute: AdminCommentsIndexRoute,
   AdminFriendLinksIndexRoute: AdminFriendLinksIndexRoute,
+  AdminGuestbookIndexRoute: AdminGuestbookIndexRoute,
   AdminMediaIndexRoute: AdminMediaIndexRoute,
   AdminSettingsIndexRoute: AdminSettingsIndexRoute,
   AdminTagsIndexRoute: AdminTagsIndexRoute,

@@ -60,6 +60,10 @@ export function resolveSystemConfig(
         config?.notification?.webhooks ?? DEFAULT_CONFIG.notification?.webhooks,
     },
     site: resolveSiteConfig(config),
+    feature: {
+      ...DEFAULT_CONFIG.feature,
+      ...config?.feature,
+    },
   };
 }
 

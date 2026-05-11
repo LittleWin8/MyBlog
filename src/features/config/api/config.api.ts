@@ -2,9 +2,19 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { parseSiteAssetUploadInput } from "@/features/config/config.asset.schema";
 import { SystemConfigSchema } from "@/features/config/config.schema";
+import * as ConfigRepo from "@/features/config/data/config.data";
 import * as ConfigService from "@/features/config/service/config.service";
-import { adminMiddleware } from "@/lib/middlewares";
+import { resolveSystemConfig } from "@/features/config/service/config.service";
+import { adminMiddleware, dbMiddleware } from "@/lib/middlewares";
 import { m } from "@/paraglide/messages";
+
+export const getFeatureConfigFn = createServerFn()
+  .middleware([dbMiddleware])
+  .handler(async ({ context }) => {
+    const raw = await ConfigRepo.getSystemConfig(context.db);
+    const config = resolveSystemConfig(raw);
+    return config.feature ?? { commentsEnabled: true, guestbookEnabled: true };
+  });
 
 export const getSystemConfigFn = createServerFn()
   .middleware([adminMiddleware])

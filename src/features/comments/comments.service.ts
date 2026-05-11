@@ -9,6 +9,8 @@ import type {
 } from "@/features/comments/comments.schema";
 import * as CommentRepo from "@/features/comments/data/comments.data";
 import { sendReplyNotification } from "@/features/comments/workflows/helpers";
+import * as ConfigRepo from "@/features/config/data/config.data";
+import { resolveSystemConfig } from "@/features/config/service/config.service";
 import { publishNotificationEvent } from "@/features/notification/service/notification.publisher";
 import * as PostService from "@/features/posts/services/posts.service";
 import { convertToPlainText } from "@/features/posts/utils/content";
@@ -81,6 +83,13 @@ export async function createComment(
   context: AuthContext & { executionCtx: ExecutionContext },
   data: CreateCommentInput,
 ) {
+  // Check feature toggle
+  const rawConfig = await ConfigRepo.getSystemConfig(context.db);
+  const config = resolveSystemConfig(rawConfig);
+  if (config.feature?.commentsEnabled === false) {
+    return err({ reason: "FEATURE_DISABLED" });
+  }
+
   // Validation: ensure 2-level structure
   let rootId: number | null = null;
   let replyToCommentId: number | null = null;

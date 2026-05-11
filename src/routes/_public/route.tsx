@@ -41,6 +41,11 @@ function PublicLayout() {
       to: "/friend-links" as const,
       id: "friend-links",
     },
+    {
+      label: m.nav_guestbook(),
+      to: "/guestbook" as const,
+      id: "guestbook",
+    },
   ];
 
   const logout = async () => {

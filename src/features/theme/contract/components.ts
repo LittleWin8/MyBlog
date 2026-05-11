@@ -8,6 +8,7 @@ import type {
 import type {
   ForgotPasswordPageProps,
   FriendLinksPageProps,
+  GuestbookPageProps,
   HomePageProps,
   LoginPageProps,
   PostPageProps,
@@ -54,6 +55,11 @@ export interface ThemeComponents {
   FriendLinksPage: React.ComponentType<FriendLinksPageProps>;
   /** 友链列表页骨架屏 */
   FriendLinksPageSkeleton: React.ComponentType;
+
+  /** 留言板页面组件 */
+  GuestbookPage: React.ComponentType<GuestbookPageProps>;
+  /** 留言板页面骨架屏 */
+  GuestbookPageSkeleton: React.ComponentType;
 
   /** 搜索页组件 */
   SearchPage: React.ComponentType<SearchPageProps>;

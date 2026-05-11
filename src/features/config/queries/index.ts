@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import { getSystemConfigFn } from "../api/config.api";
+import { getFeatureConfigFn, getSystemConfigFn } from "../api/config.api";
 import { getSiteConfigFn, getSiteDomainFn } from "../api/site.api";
 
 export const CONFIG_KEYS = {
@@ -9,6 +9,7 @@ export const CONFIG_KEYS = {
   system: ["config", "system"] as const,
   site: ["config", "site"] as const,
   siteDomain: ["config", "siteDomain"] as const,
+  feature: ["config", "feature"] as const,
 };
 
 export const systemConfigQuery = queryOptions({
@@ -24,4 +25,9 @@ export const siteConfigQuery = queryOptions({
 export const siteDomainQuery = queryOptions({
   queryKey: CONFIG_KEYS.siteDomain,
   queryFn: () => getSiteDomainFn(),
+});
+
+export const featureConfigQuery = queryOptions({
+  queryKey: CONFIG_KEYS.feature,
+  queryFn: () => getFeatureConfigFn(),
 });
