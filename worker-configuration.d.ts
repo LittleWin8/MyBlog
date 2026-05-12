@@ -35,7 +35,6 @@ declare namespace Cloudflare {
 		SCHEDULED_PUBLISH_WORKFLOW: Workflow<Parameters<import("./src/server").ScheduledPublishWorkflow['run']>[0]['payload']>;
 		EXPORT_WORKFLOW: Workflow<Parameters<import("./src/server").ExportWorkflow['run']>[0]['payload']>;
 		IMPORT_WORKFLOW: Workflow<Parameters<import("./src/server").ImportWorkflow['run']>[0]['payload']>;
-		GUESTBOOK_MODERATION_WORKFLOW: Workflow<Parameters<import("./src/server").GuestbookModerationWorkflow['run']>[0]['payload']>;
 	}
 }
 interface Env extends Cloudflare.Env {}
@@ -8776,8 +8775,8 @@ interface BasicImageTransformations {
     gravity?: 'face' | 'left' | 'right' | 'top' | 'bottom' | 'center' | 'auto' | 'entropy' | BasicImageTransformationsGravityCoordinates;
     /**
      * Background color to add underneath the image. Applies only to images with
-     * transparency (such as PNG). Accepts any CSS color (#RRGGBB, rgba(â€¦),
-     * hsl(â€¦), etc.)
+     * transparency (such as PNG). Accepts any CSS color (#RRGGBB, rgba(â€?,
+     * hsl(â€?, etc.)
      */
     background?: string;
     /**

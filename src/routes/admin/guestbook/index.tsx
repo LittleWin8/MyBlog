@@ -440,14 +440,12 @@ function GuestbookAdminPage() {
 function StatusBadge({ status }: { status: string }) {
   const labels: Record<string, string> = {
     published: m.guestbook_status_published(),
-    verifying: m.guestbook_status_verifying(),
     pending: m.guestbook_status_pending(),
     deleted: m.guestbook_status_deleted(),
   };
 
   const styles: Record<string, string> = {
     published: "text-foreground",
-    verifying: "text-blue-500",
     pending: "text-yellow-500",
     deleted: "text-muted-foreground",
   };

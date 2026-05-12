@@ -1,4 +1,4 @@
-import { and, count, desc, eq, isNull, sql } from "drizzle-orm";
+import { and, count, desc, eq, isNull } from "drizzle-orm";
 import { buildGuestbookWhereClause } from "@/features/guestbook/data/helper";
 import type { GuestbookStatus } from "@/lib/db/schema";
 import { GuestbookTable, user } from "@/lib/db/schema";
@@ -346,16 +346,13 @@ export async function getUserById(db: DB, userId: string) {
   return result.length > 0 ? result[0] : null;
 }
 
-// Dashboard: count entries needing review (pending + verifying)
+// Dashboard: count entries needing review
 export async function getPendingEntriesCount(db: DB) {
   const [result] = await db
     .select({ count: count() })
     .from(GuestbookTable)
     .where(
-      and(
-        isNull(GuestbookTable.rootId),
-        sql`${GuestbookTable.status} IN ('pending', 'verifying')`,
-      ),
+      and(isNull(GuestbookTable.rootId), eq(GuestbookTable.status, "pending")),
     );
   return result.count;
 }

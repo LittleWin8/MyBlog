@@ -1,7 +1,6 @@
 import { handleQueueBatch } from "@/lib/queue/queue.handler";
 
 export { CommentModerationWorkflow } from "@/features/comments/workflows/comment-moderation";
-export { GuestbookModerationWorkflow } from "@/features/guestbook/workflows/guestbook-moderation";
 export { ExportWorkflow } from "@/features/import-export/workflows/export.workflow";
 export { ImportWorkflow } from "@/features/import-export/workflows/import.workflow";
 export { PostAutoSnapshotWorkflow } from "@/features/posts/workflows/post-auto-snapshot";

@@ -39,7 +39,7 @@ describe("Guestbook Integration", () => {
   });
 
   describe("Entry Creation", () => {
-    it("should create an entry with verifying status for non-admin user", async () => {
+    it("should create an entry with pending status for non-admin user", async () => {
       const entry = unwrap(
         await GuestbookService.createEntry(userContext, {
           content: "Hello, this is a test message!",
@@ -49,7 +49,7 @@ describe("Guestbook Integration", () => {
       expect(entry.content).toBe("Hello, this is a test message!");
       expect(entry.userId).toBe("user-1");
       expect(entry.nickname).toBeNull();
-      expect(entry.status).toBe("verifying");
+      expect(entry.status).toBe("pending");
     });
 
     it("should create an entry with published status for admin user", async () => {
@@ -62,7 +62,7 @@ describe("Guestbook Integration", () => {
       expect(entry.status).toBe("published");
     });
 
-    it("should create an entry with verifying status for anonymous user", async () => {
+    it("should create an entry with pending status for anonymous user", async () => {
       const anonContext = {
         env: adminContext.env,
         db: adminContext.db,
@@ -79,7 +79,7 @@ describe("Guestbook Integration", () => {
 
       expect(entry.userId).toBeNull();
       expect(entry.nickname).toBe("Guest123");
-      expect(entry.status).toBe("verifying");
+      expect(entry.status).toBe("pending");
     });
 
     it("should return NICKNAME_REQUIRED for anonymous user without nickname", async () => {
@@ -160,15 +160,15 @@ describe("Guestbook Integration", () => {
   });
 
   describe("ViewerId Pattern", () => {
-    it("should show own verifying entries to the viewer", async () => {
+    it("should show own pending entries to the viewer", async () => {
       const entry = unwrap(
         await GuestbookService.createEntry(userContext, {
-          content: "My verifying entry",
+          content: "My pending entry",
         }),
       );
-      expect(entry.status).toBe("verifying");
+      expect(entry.status).toBe("pending");
 
-      // User should see their own verifying entry
+      // User should see their own pending entry
       const result = await GuestbookService.getRootEntries(userContext, {
         viewerId: "user-1",
       });
@@ -176,10 +176,10 @@ describe("Guestbook Integration", () => {
       expect(result.items.some((e) => e.id === entry.id)).toBe(true);
     });
 
-    it("should not show other users verifying entries", async () => {
+    it("should not show other users pending entries", async () => {
       unwrap(
         await GuestbookService.createEntry(userContext, {
-          content: "Other user verifying entry",
+          content: "Other user pending entry",
         }),
       );
 
@@ -197,7 +197,7 @@ describe("Guestbook Integration", () => {
       });
       await seedUser(otherContext.db, otherSession.user);
 
-      // Other user should not see the verifying entry
+      // Other user should not see the pending entry
       const result = await GuestbookService.getRootEntries(otherContext, {
         viewerId: "user-2",
       });

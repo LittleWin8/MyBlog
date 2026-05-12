@@ -123,25 +123,9 @@ export async function createEntry(
     nickname: userId ? null : data.nickname,
     rootId,
     replyToUserId,
-    // Admin entries are published immediately, others go through moderation
-    status: isAdmin ? "published" : "verifying",
+    // Admin entries are published immediately, others pending manual review
+    status: isAdmin ? "published" : "pending",
   });
-
-  // Trigger AI moderation workflow only for non-admin users
-  if (!isAdmin) {
-    try {
-      await startGuestbookModerationWorkflow(context, { entryId: entry.id });
-    } catch (error) {
-      console.error(
-        JSON.stringify({
-          message: "failed to start guestbook moderation workflow",
-          entryId: entry.id,
-          error: error instanceof Error ? error.message : String(error),
-        }),
-      );
-      // Entry remains in "verifying" for manual admin review
-    }
-  }
 
   // Send reply notification for admin replies
   if (isAdmin && rootId) {
@@ -296,33 +280,10 @@ export async function adminDeleteEntry(
   return ok({ success: true });
 }
 
-// ============ Workflow Methods ============
-
-export async function startGuestbookModerationWorkflow(
-  context: DbContext,
-  data: { entryId: number },
-) {
-  await context.env.GUESTBOOK_MODERATION_WORKFLOW.create({
-    params: {
-      entryId: data.entryId,
-    },
-  });
-}
+// ============ Helper Methods ============
 
 export async function findEntryById(context: DbContext, entryId: number) {
   return await GuestbookRepo.findEntryById(context.db, entryId);
-}
-
-export async function updateEntryStatus(
-  context: DbContext,
-  entryId: number,
-  status: "published" | "pending" | "deleted",
-  aiReason?: string,
-) {
-  return await GuestbookRepo.updateEntry(context.db, entryId, {
-    status,
-    aiReason,
-  });
 }
 
 export async function getUserEntryStats(context: DbContext, userId: string) {

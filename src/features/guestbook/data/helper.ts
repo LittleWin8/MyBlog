@@ -28,7 +28,7 @@ export function buildGuestbookWhereClause(options: {
   }
 
   // logic:
-  // 1. If viewerId is provided, we want (status: published) OR (userId: viewerId AND status: pending/verifying)
+  // 1. If viewerId is provided, we want (status: published) OR (userId: viewerId AND status: pending)
   // 2. If status is explicitly provided, we use that.
 
   if (viewerId && !status && !userId) {
@@ -37,7 +37,7 @@ export function buildGuestbookWhereClause(options: {
         inArray(GuestbookTable.status, ["published"]),
         and(
           eq(GuestbookTable.userId, viewerId),
-          inArray(GuestbookTable.status, ["pending", "verifying"]),
+          inArray(GuestbookTable.status, ["pending"]),
         ),
       ),
     );

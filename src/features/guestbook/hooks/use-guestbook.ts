@@ -52,7 +52,7 @@ export function useGuestbook() {
       });
 
       // Show appropriate success message based on status
-      if (result.data?.status === "verifying") {
+      if (result.data?.status === "pending") {
         toast.success(m.guestbook_create_pending_success());
       } else {
         toast.success(m.guestbook_create_success());
