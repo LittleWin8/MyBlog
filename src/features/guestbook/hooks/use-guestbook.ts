@@ -50,7 +50,13 @@ export function useGuestbook() {
         queryKey: GUESTBOOK_KEYS.repliesLists,
         exact: false,
       });
-      toast.success(m.guestbook_create_success());
+
+      // Show appropriate success message based on status
+      if (result.data?.status === "verifying") {
+        toast.success(m.guestbook_create_pending_success());
+      } else {
+        toast.success(m.guestbook_create_success());
+      }
     },
   });
 
@@ -91,7 +97,9 @@ export function useGuestbook() {
         queryKey: GUESTBOOK_KEYS.repliesLists,
         exact: false,
       });
-      toast.success(m.guestbook_create_success());
+
+      // Anonymous entries always go through moderation
+      toast.success(m.guestbook_create_pending_success());
     },
   });
 
@@ -149,7 +157,7 @@ export function useAdminGuestbook() {
     },
     onSuccess: (result) => {
       if (result.error) {
-        toast.error(m.guestbook_delete_failed());
+        toast.error(m.guestbook_moderation_failed());
         return;
       }
 
@@ -157,7 +165,7 @@ export function useAdminGuestbook() {
         queryKey: GUESTBOOK_KEYS.all,
         exact: false,
       });
-      toast.success(m.guestbook_delete_success());
+      toast.success(m.guestbook_moderation_success());
     },
   });
 

@@ -9,8 +9,8 @@ import type {
 } from "@/features/comments/comments.schema";
 import * as CommentRepo from "@/features/comments/data/comments.data";
 import { sendReplyNotification } from "@/features/comments/workflows/helpers";
-import * as ConfigRepo from "@/features/config/data/config.data";
 import { resolveSystemConfig } from "@/features/config/config.service";
+import * as ConfigRepo from "@/features/config/data/config.data";
 import { publishNotificationEvent } from "@/features/notification/service/notification.publisher";
 import * as PostService from "@/features/posts/services/posts.service";
 import { convertToPlainText } from "@/features/posts/utils/content";

@@ -35,6 +35,7 @@ declare namespace Cloudflare {
 		SCHEDULED_PUBLISH_WORKFLOW: Workflow<Parameters<import("./src/server").ScheduledPublishWorkflow['run']>[0]['payload']>;
 		EXPORT_WORKFLOW: Workflow<Parameters<import("./src/server").ExportWorkflow['run']>[0]['payload']>;
 		IMPORT_WORKFLOW: Workflow<Parameters<import("./src/server").ImportWorkflow['run']>[0]['payload']>;
+		GUESTBOOK_MODERATION_WORKFLOW: Workflow<Parameters<import("./src/server").GuestbookModerationWorkflow['run']>[0]['payload']>;
 	}
 }
 interface Env extends Cloudflare.Env {}

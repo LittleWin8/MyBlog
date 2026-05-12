@@ -63,11 +63,21 @@ export const CreateGuestbookInputSchema = z.object({
   content: z.string().min(1).max(1000),
   nickname: z.string().max(20).optional(),
   rootId: z.number().optional(),
-  replyToUserId: z.string().optional(),
 });
 
 export const DeleteGuestbookInputSchema = z.object({
   id: z.number(),
+});
+
+// My Entries
+export const GetMyEntriesInputSchema = z.object({
+  offset: z.number().optional(),
+  limit: z.number().optional(),
+});
+
+export const GetMyEntriesResponseSchema = z.object({
+  items: z.array(GuestbookSelectSchema),
+  total: z.number(),
 });
 
 // Admin API Schemas
@@ -79,7 +89,7 @@ export const AdminGetGuestbookInputSchema = z.object({
 
 export const ModerateGuestbookInputSchema = z.object({
   id: z.number(),
-  status: z.enum(["published", "deleted"]),
+  status: z.enum(["published", "pending", "deleted"]),
 });
 
 // Types
@@ -88,7 +98,12 @@ export type GuestbookWithReplyCount = z.infer<
   typeof GuestbookWithReplyCountSchema
 >;
 export type GetGuestbookInput = z.infer<typeof GetGuestbookInputSchema>;
+export type GetMyEntriesInput = z.infer<typeof GetMyEntriesInputSchema>;
 export type CreateGuestbookInput = z.infer<typeof CreateGuestbookInputSchema>;
 export type DeleteGuestbookInput = z.infer<typeof DeleteGuestbookInputSchema>;
-export type AdminGetGuestbookInput = z.infer<typeof AdminGetGuestbookInputSchema>;
-export type ModerateGuestbookInput = z.infer<typeof ModerateGuestbookInputSchema>;
+export type AdminGetGuestbookInput = z.infer<
+  typeof AdminGetGuestbookInputSchema
+>;
+export type ModerateGuestbookInput = z.infer<
+  typeof ModerateGuestbookInputSchema
+>;

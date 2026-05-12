@@ -3,29 +3,37 @@ import {
   CreateGuestbookInputSchema,
   DeleteGuestbookInputSchema,
   GetGuestbookInputSchema,
+  GetMyEntriesInputSchema,
   GetRepliesInputSchema,
 } from "@/features/guestbook/guestbook.schema";
 import * as GuestbookService from "@/features/guestbook/guestbook.service";
 import {
   authMiddleware,
   createRateLimitMiddleware,
-  dbMiddleware,
   sessionMiddleware,
   turnstileMiddleware,
 } from "@/lib/middlewares";
 
 export const getGuestbookEntriesFn = createServerFn()
-  .middleware([dbMiddleware])
+  .middleware([sessionMiddleware])
   .inputValidator(GetGuestbookInputSchema)
   .handler(async ({ data, context }) => {
-    return await GuestbookService.getRootEntries(context, data);
+    const viewerId = context.session?.user?.id;
+    return await GuestbookService.getRootEntries(context, {
+      ...data,
+      viewerId,
+    });
   });
 
 export const getGuestbookRepliesFn = createServerFn()
-  .middleware([dbMiddleware])
+  .middleware([sessionMiddleware])
   .inputValidator(GetRepliesInputSchema)
   .handler(async ({ data, context }) => {
-    return await GuestbookService.getRepliesByRootId(context, data);
+    const viewerId = context.session?.user?.id;
+    return await GuestbookService.getRepliesByRootId(context, {
+      ...data,
+      viewerId,
+    });
   });
 
 export const createGuestbookEntryFn = createServerFn({ method: "POST" })
@@ -74,4 +82,11 @@ export const deleteGuestbookEntryFn = createServerFn({ method: "POST" })
   .inputValidator(DeleteGuestbookInputSchema)
   .handler(async ({ data, context }) => {
     return await GuestbookService.deleteEntry(context, data);
+  });
+
+export const getMyGuestbookEntriesFn = createServerFn()
+  .middleware([authMiddleware])
+  .inputValidator(GetMyEntriesInputSchema)
+  .handler(async ({ data, context }) => {
+    return await GuestbookService.getMyEntries(context, data);
   });

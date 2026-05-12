@@ -10,6 +10,10 @@ export const NOTIFICATION_EVENT = {
   FRIEND_LINK_SUBMITTED: "friend_link.submitted",
   FRIEND_LINK_APPROVED: "friend_link.approved",
   FRIEND_LINK_REJECTED: "friend_link.rejected",
+  GUESTBOOK_ADMIN_NEW_ENTRY: "guestbook.admin_new_entry",
+  GUESTBOOK_ADMIN_PENDING_REVIEW: "guestbook.admin_pending_review",
+  GUESTBOOK_REPLY_TO_ADMIN_PUBLISHED: "guestbook.reply_to_admin_published",
+  GUESTBOOK_REPLY_TO_USER_PUBLISHED: "guestbook.reply_to_user_published",
 } as const;
 
 export const ADMIN_NOTIFICATION_EVENTS = [
@@ -17,12 +21,16 @@ export const ADMIN_NOTIFICATION_EVENTS = [
   NOTIFICATION_EVENT.COMMENT_ADMIN_PENDING_REVIEW,
   NOTIFICATION_EVENT.COMMENT_REPLY_TO_ADMIN_PUBLISHED,
   NOTIFICATION_EVENT.FRIEND_LINK_SUBMITTED,
+  NOTIFICATION_EVENT.GUESTBOOK_ADMIN_NEW_ENTRY,
+  NOTIFICATION_EVENT.GUESTBOOK_ADMIN_PENDING_REVIEW,
 ] as const;
 
 export const USER_NOTIFICATION_EVENTS = [
   NOTIFICATION_EVENT.COMMENT_REPLY_TO_USER_PUBLISHED,
   NOTIFICATION_EVENT.FRIEND_LINK_APPROVED,
   NOTIFICATION_EVENT.FRIEND_LINK_REJECTED,
+  NOTIFICATION_EVENT.GUESTBOOK_REPLY_TO_ADMIN_PUBLISHED,
+  NOTIFICATION_EVENT.GUESTBOOK_REPLY_TO_USER_PUBLISHED,
 ] as const;
 
 export const notificationEventTypeSchema = z.enum(NOTIFICATION_EVENT);
@@ -103,6 +111,46 @@ const friendLinkRejectedNotificationSchema = z.object({
   }),
 });
 
+const guestbookAdminNewEntryNotificationSchema = z.object({
+  type: z.literal(NOTIFICATION_EVENT.GUESTBOOK_ADMIN_NEW_ENTRY),
+  data: z.object({
+    to: z.string(),
+    submitterName: z.string(),
+    entryPreview: z.string(),
+    entryUrl: z.string(),
+  }),
+});
+
+const guestbookAdminPendingReviewNotificationSchema = z.object({
+  type: z.literal(NOTIFICATION_EVENT.GUESTBOOK_ADMIN_PENDING_REVIEW),
+  data: z.object({
+    to: z.string(),
+    submitterName: z.string(),
+    entryPreview: z.string(),
+    reviewUrl: z.string(),
+  }),
+});
+
+const guestbookReplyToAdminPublishedNotificationSchema = z.object({
+  type: z.literal(NOTIFICATION_EVENT.GUESTBOOK_REPLY_TO_ADMIN_PUBLISHED),
+  data: z.object({
+    to: z.string(),
+    replierName: z.string(),
+    replyPreview: z.string(),
+    entryUrl: z.string(),
+  }),
+});
+
+const guestbookReplyToUserPublishedNotificationSchema = z.object({
+  type: z.literal(NOTIFICATION_EVENT.GUESTBOOK_REPLY_TO_USER_PUBLISHED),
+  data: z.object({
+    to: z.string(),
+    replierName: z.string(),
+    replyPreview: z.string(),
+    entryUrl: z.string(),
+  }),
+});
+
 export const notificationEventSchema = z.discriminatedUnion("type", [
   commentAdminRootCreatedNotificationSchema,
   commentAdminPendingReviewNotificationSchema,
@@ -111,6 +159,10 @@ export const notificationEventSchema = z.discriminatedUnion("type", [
   friendLinkSubmittedNotificationSchema,
   friendLinkApprovedNotificationSchema,
   friendLinkRejectedNotificationSchema,
+  guestbookAdminNewEntryNotificationSchema,
+  guestbookAdminPendingReviewNotificationSchema,
+  guestbookReplyToAdminPublishedNotificationSchema,
+  guestbookReplyToUserPublishedNotificationSchema,
 ]);
 
 export type NotificationEvent = z.infer<typeof notificationEventSchema>;

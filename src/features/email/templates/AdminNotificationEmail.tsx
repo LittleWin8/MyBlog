@@ -7,8 +7,8 @@ interface AdminNotificationEmailProps {
   commentUrl: string;
   commenterName: string;
   locale: Locale;
-  mode: "new" | "pending";
-  postTitle: string;
+  mode: "new" | "pending" | "guestbook-new" | "guestbook-pending";
+  postTitle?: string;
 }
 
 export const AdminNotificationEmail = ({
@@ -19,23 +19,67 @@ export const AdminNotificationEmail = ({
   mode,
   postTitle,
 }: AdminNotificationEmailProps) => {
-  const isPending = mode === "pending";
+  const isPending = mode === "pending" || mode === "guestbook-pending";
+  const isGuestbook = mode === "guestbook-new" || mode === "guestbook-pending";
+
+  const previewText = isGuestbook
+    ? isPending
+      ? m.email_guestbook_admin_pending_preview(
+          { submitterName: commenterName },
+          { locale },
+        )
+      : m.email_guestbook_admin_new_preview(
+          { submitterName: commenterName },
+          { locale },
+        )
+    : isPending
+      ? m.email_comment_admin_pending_preview(
+          { commenterName, postTitle: postTitle ?? "" },
+          { locale },
+        )
+      : m.email_comment_admin_root_preview(
+          { commenterName, postTitle: postTitle ?? "" },
+          { locale },
+        );
+
+  const title = isGuestbook
+    ? isPending
+      ? m.email_guestbook_admin_pending_title({}, { locale })
+      : m.email_guestbook_admin_new_title({}, { locale })
+    : isPending
+      ? m.email_comment_admin_pending_title({}, { locale })
+      : m.email_comment_admin_root_title({}, { locale });
+
+  const intro = isGuestbook
+    ? isPending
+      ? m.email_guestbook_admin_pending_intro(
+          { submitterName: commenterName },
+          { locale },
+        )
+      : m.email_guestbook_admin_new_intro(
+          { submitterName: commenterName },
+          { locale },
+        )
+    : isPending
+      ? m.email_comment_admin_pending_intro(
+          { commenterName, postTitle: postTitle ?? "" },
+          { locale },
+        )
+      : m.email_comment_admin_root_intro(
+          { commenterName, postTitle: postTitle ?? "" },
+          { locale },
+        );
+
+  const actionLabel = isGuestbook
+    ? isPending
+      ? m.email_guestbook_admin_pending_action({}, { locale })
+      : m.email_guestbook_admin_new_action({}, { locale })
+    : isPending
+      ? m.email_comment_admin_pending_action({}, { locale })
+      : m.email_comment_admin_root_action({}, { locale });
 
   return (
-    <EmailLayout
-      locale={locale}
-      previewText={
-        isPending
-          ? m.email_comment_admin_pending_preview(
-              { commenterName, postTitle },
-              { locale },
-            )
-          : m.email_comment_admin_root_preview(
-              { commenterName, postTitle },
-              { locale },
-            )
-      }
-    >
+    <EmailLayout locale={locale} previewText={previewText}>
       <h1
         style={{
           fontFamily: '"Playfair Display", "Georgia", serif',
@@ -46,20 +90,10 @@ export const AdminNotificationEmail = ({
           lineHeight: "1.4",
         }}
       >
-        {isPending
-          ? m.email_comment_admin_pending_title({}, { locale })
-          : m.email_comment_admin_root_title({}, { locale })}
+        {title}
       </h1>
       <p style={{ fontSize: "14px", color: "#444", lineHeight: "1.6" }}>
-        {isPending
-          ? m.email_comment_admin_pending_intro(
-              { commenterName, postTitle },
-              { locale },
-            )
-          : m.email_comment_admin_root_intro(
-              { commenterName, postTitle },
-              { locale },
-            )}
+        {intro}
       </p>
       <blockquote
         style={{
@@ -87,9 +121,7 @@ export const AdminNotificationEmail = ({
             letterSpacing: "0.05em",
           }}
         >
-          {isPending
-            ? m.email_comment_admin_pending_action({}, { locale })
-            : m.email_comment_admin_root_action({}, { locale })}
+          {actionLabel}
         </a>
       </div>
     </EmailLayout>

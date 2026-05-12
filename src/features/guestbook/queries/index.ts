@@ -3,6 +3,7 @@ import { adminGetGuestbookEntriesFn } from "../api/guestbook.admin.api";
 import {
   getGuestbookEntriesFn,
   getGuestbookRepliesFn,
+  getMyGuestbookEntriesFn,
 } from "../api/guestbook.public.api";
 
 export const GUESTBOOK_KEYS = {
@@ -11,6 +12,7 @@ export const GUESTBOOK_KEYS = {
   replies: (rootId: number) => ["guestbook", "replies", rootId] as const,
   repliesLists: ["guestbook", "replies"] as const,
   admin: ["guestbook", "admin"] as const,
+  my: ["guestbook", "my"] as const,
 };
 
 export function guestbookRootsQuery() {
@@ -64,5 +66,12 @@ export function adminGuestbookQuery(options: {
   return queryOptions({
     queryKey: [...GUESTBOOK_KEYS.admin, options] as const,
     queryFn: () => adminGetGuestbookEntriesFn({ data: options }),
+  });
+}
+
+export function myGuestbookEntriesQuery() {
+  return queryOptions({
+    queryKey: GUESTBOOK_KEYS.my,
+    queryFn: () => getMyGuestbookEntriesFn({ data: {} }),
   });
 }

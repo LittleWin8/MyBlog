@@ -18,7 +18,11 @@ export const moderateGuestbookEntryFn = createServerFn({ method: "POST" })
   .middleware([adminMiddleware])
   .inputValidator(ModerateGuestbookInputSchema)
   .handler(async ({ data, context }) => {
-    return await GuestbookService.moderateEntry(context, data);
+    return await GuestbookService.moderateEntry(
+      context,
+      data,
+      context.session.user.id,
+    );
   });
 
 export const adminDeleteGuestbookEntryFn = createServerFn({ method: "POST" })

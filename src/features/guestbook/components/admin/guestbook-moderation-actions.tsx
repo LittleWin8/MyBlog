@@ -31,7 +31,9 @@ export const GuestbookModerationActions = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleStatusChange = (newStatus: "published" | "deleted") => {
+  const handleStatusChange = (
+    newStatus: "published" | "pending" | "deleted",
+  ) => {
     setIsOpen(false);
     moderate({ data: { id: entryId, status: newStatus } });
   };
@@ -75,6 +77,16 @@ export const GuestbookModerationActions = ({
               </button>
             )}
 
+            {status !== "pending" && (
+              <button
+                onClick={() => handleStatusChange("pending")}
+                className="w-full flex items-center justify-between px-3 py-2 text-[10px] font-mono text-left hover:bg-muted/10 transition-colors text-muted-foreground hover:text-yellow-500 group"
+              >
+                <span>{m.guestbook_status_pending()}</span>
+                <ShieldAlert className="h-3 w-3 opacity-0 group-hover:opacity-100" />
+              </button>
+            )}
+
             {status !== "deleted" && (
               <button
                 onClick={() => handleStatusChange("deleted")}
@@ -96,7 +108,7 @@ export const GuestbookModerationActions = ({
             className="w-full flex items-center justify-between px-3 py-2 text-[10px] font-mono text-left hover:bg-red-500/10 text-red-500 transition-colors group"
           >
             <span>{m.guestbook_action_destroy()}</span>
-            <ShieldAlert className="h-3 w-3 opacity-0 group-hover:opacity-100" />
+            <Trash2 className="h-3 w-3 opacity-0 group-hover:opacity-100" />
           </button>
         </div>
       )}

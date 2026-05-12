@@ -115,6 +115,26 @@ export function createNotificationExampleEvent(
           reviewUrl: t("friend_link_review_url"),
         },
       };
+    case "guestbook.admin_new_entry":
+      return {
+        type: "guestbook.admin_new_entry",
+        data: {
+          to: t("admin_email"),
+          submitterName: t("submitter_name"),
+          entryPreview: t("comment_preview"),
+          entryUrl: t("comment_url"),
+        },
+      };
+    case "guestbook.admin_pending_review":
+      return {
+        type: "guestbook.admin_pending_review",
+        data: {
+          to: t("admin_email"),
+          submitterName: t("submitter_name"),
+          entryPreview: t("comment_preview"),
+          reviewUrl: t("review_url"),
+        },
+      };
     default: {
       eventType satisfies never;
       throw new Error("Unknown notification event type");

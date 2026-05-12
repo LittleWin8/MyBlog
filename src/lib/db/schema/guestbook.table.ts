@@ -3,7 +3,12 @@ import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { user } from "./auth.table";
 import { createdAt, id, updatedAt } from "./helper";
 
-export const GUESTBOOK_STATUSES = ["published", "deleted"] as const;
+export const GUESTBOOK_STATUSES = [
+  "published",
+  "verifying",
+  "pending",
+  "deleted",
+] as const;
 
 export const GuestbookTable = sqliteTable(
   "guestbook",
@@ -23,7 +28,8 @@ export const GuestbookTable = sqliteTable(
     }),
     status: text("status", { enum: GUESTBOOK_STATUSES })
       .notNull()
-      .default("published"),
+      .default("verifying"),
+    aiReason: text("ai_reason"),
     createdAt,
     updatedAt,
   },

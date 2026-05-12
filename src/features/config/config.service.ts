@@ -9,8 +9,8 @@ import {
 import * as ConfigRepo from "@/features/config/data/config.data";
 import { FullSiteConfigSchema } from "@/features/config/site-config.schema";
 import type { SocialLink } from "@/features/config/utils/social-platforms";
-import { ok } from "@/lib/errors";
 import * as Storage from "@/features/media/data/media.storage";
+import { ok } from "@/lib/errors";
 import { purgeSiteCDNCache } from "@/lib/invalidate";
 
 const DEFAULT_SMTP_PORT = 465;

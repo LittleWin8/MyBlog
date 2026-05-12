@@ -66,6 +66,34 @@ function createPlainTextMessage(event: NotificationEvent, locale: Locale) {
             { siteName: event.data.siteName },
             { locale },
           );
+    case "guestbook.admin_new_entry":
+      return m.email_webhook_guestbook_admin_new_message(
+        {
+          entryPreview: event.data.entryPreview,
+          entryUrl: event.data.entryUrl,
+          submitterName: event.data.submitterName,
+        },
+        { locale },
+      );
+    case "guestbook.admin_pending_review":
+      return m.email_webhook_guestbook_admin_pending_message(
+        {
+          entryPreview: event.data.entryPreview,
+          reviewUrl: event.data.reviewUrl,
+          submitterName: event.data.submitterName,
+        },
+        { locale },
+      );
+    case "guestbook.reply_to_admin_published":
+    case "guestbook.reply_to_user_published":
+      return m.email_webhook_guestbook_reply_message(
+        {
+          entryUrl: event.data.entryUrl,
+          replierName: event.data.replierName,
+          replyPreview: event.data.replyPreview,
+        },
+        { locale },
+      );
     default: {
       event satisfies never;
       throw new Error("Unknown notification event");

@@ -10,6 +10,7 @@ import {
   Eye,
   FileText,
   MessageSquare,
+  MessageSquareText,
   RefreshCw,
   Users,
 } from "lucide-react";
@@ -154,7 +155,7 @@ function DashboardOverview() {
       </header>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         <Link to="/admin/comments" search={{ status: "pending" }}>
           <StatCard
             label={m.admin_overview_stat_pending_comments()}
@@ -187,6 +188,18 @@ function DashboardOverview() {
             value={stats.drafts.toString()}
             icon={<Activity size={14} />}
             trend={m.admin_overview_trend_in_progress()}
+          />
+        </Link>
+        <Link to="/admin/guestbook">
+          <StatCard
+            label={m.admin_overview_pending_guestbook()}
+            value={stats.pendingGuestbook.toString()}
+            icon={<MessageSquareText size={14} />}
+            trend={
+              stats.pendingGuestbook > 0
+                ? m.admin_overview_trend_action_required()
+                : m.admin_overview_trend_all_good()
+            }
           />
         </Link>
       </div>

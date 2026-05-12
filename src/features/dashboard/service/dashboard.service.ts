@@ -5,6 +5,7 @@ import type {
 } from "@/features/dashboard/dashboard.schema";
 import { ALL_RANGES } from "@/features/dashboard/dashboard.schema";
 import * as DashboardRepo from "@/features/dashboard/data/dashboard.data";
+import * as GuestbookRepo from "@/features/guestbook/data/guestbook.data";
 import * as MediaRepo from "@/features/media/data/media.data";
 import * as PageviewRepo from "@/features/pageview/data/pageview.data";
 import {
@@ -73,6 +74,7 @@ export async function getDashboardStats(
     publishedPosts,
     drafts,
     mediaSize,
+    pendingGuestbook,
     recentComments,
     recentPosts,
     recentUsers,
@@ -81,6 +83,7 @@ export async function getDashboardStats(
     DashboardRepo.getPublishedPostsCount(db),
     DashboardRepo.getDraftsCount(db),
     MediaRepo.getTotalMediaSize(db),
+    GuestbookRepo.getPendingEntriesCount(db),
     DashboardRepo.getRecentComments(db, 10),
     DashboardRepo.getRecentPosts(db, 10),
     DashboardRepo.getRecentUsers(db, 10),
@@ -150,6 +153,7 @@ export async function getDashboardStats(
       publishedPosts,
       drafts,
       mediaSize,
+      pendingGuestbook,
     },
     activities,
     trafficByRange,
