@@ -145,6 +145,21 @@ export function createTestContext(
     ReturnType<Env["SCHEDULED_PUBLISH_WORKFLOW"]["createBatch"]>
   >);
 
+  vi.spyOn(
+    context.env.GUESTBOOK_MODERATION_WORKFLOW,
+    "create",
+  ).mockResolvedValue(
+    mockWorkflowInstance as unknown as Awaited<
+      ReturnType<Env["GUESTBOOK_MODERATION_WORKFLOW"]["create"]>
+    >,
+  );
+  vi.spyOn(context.env.GUESTBOOK_MODERATION_WORKFLOW, "get").mockResolvedValue({
+    ...mockWorkflowInstance,
+    terminate: vi.fn(),
+  } as unknown as Awaited<
+    ReturnType<Env["GUESTBOOK_MODERATION_WORKFLOW"]["get"]>
+  >);
+
   return context;
 }
 

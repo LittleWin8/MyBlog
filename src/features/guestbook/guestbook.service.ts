@@ -127,6 +127,22 @@ export async function createEntry(
     status: isAdmin ? "published" : "pending",
   });
 
+  // Trigger AI moderation workflow for non-admin entries
+  if (!isAdmin) {
+    try {
+      await startGuestbookModerationWorkflow(context, { entryId: entry.id });
+    } catch (error) {
+      console.error(
+        JSON.stringify({
+          message: "failed to start guestbook moderation workflow",
+          entryId: entry.id,
+          error: error instanceof Error ? error.message : String(error),
+        }),
+      );
+      // Entry remains in "pending" for manual admin review
+    }
+  }
+
   // Send reply notification for admin replies
   if (isAdmin && rootId) {
     await sendGuestbookReplyNotification(context, {
@@ -281,6 +297,17 @@ export async function adminDeleteEntry(
 }
 
 // ============ Helper Methods ============
+
+export async function startGuestbookModerationWorkflow(
+  context: DbContext,
+  data: { entryId: number },
+) {
+  await context.env.GUESTBOOK_MODERATION_WORKFLOW.create({
+    params: {
+      entryId: data.entryId,
+    },
+  });
+}
 
 export async function findEntryById(context: DbContext, entryId: number) {
   return await GuestbookRepo.findEntryById(context.db, entryId);
