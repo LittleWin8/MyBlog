@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import * as ConfigService from "@/features/config/service/config.service";
+import * as ConfigService from "@/features/config/config.service";
 import { serverEnv } from "@/lib/env/server.env";
 import { dbMiddleware } from "@/lib/middlewares";
 

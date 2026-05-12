@@ -1,5 +1,5 @@
 import * as ConfigRepo from "@/features/config/data/config.data";
-import { resolveSystemConfig } from "@/features/config/service/config.service";
+import { resolveSystemConfig } from "@/features/config/config.service";
 import * as GuestbookRepo from "@/features/guestbook/data/guestbook.data";
 import type {
   CreateGuestbookInput,

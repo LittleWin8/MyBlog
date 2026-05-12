@@ -1,4 +1,4 @@
-import * as ConfigService from "@/features/config/service/config.service";
+import * as ConfigService from "@/features/config/config.service";
 import {
   getPublishedPostsForSitemapBatch,
   type SitemapPostRow,

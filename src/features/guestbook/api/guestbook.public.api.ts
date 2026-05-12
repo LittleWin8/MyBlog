@@ -53,7 +53,6 @@ export const createAnonymousGuestbookEntryFn = createServerFn({
       key: "guestbook:create-anon",
     }),
     turnstileMiddleware,
-    dbMiddleware,
   ])
   .inputValidator(CreateGuestbookInputSchema)
   .handler(async ({ data, context }) => {

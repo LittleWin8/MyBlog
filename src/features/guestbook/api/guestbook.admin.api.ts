@@ -1,19 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
-import { z } from "zod";
-import { DeleteGuestbookInputSchema } from "@/features/guestbook/guestbook.schema";
+import {
+  AdminGetGuestbookInputSchema,
+  DeleteGuestbookInputSchema,
+  ModerateGuestbookInputSchema,
+} from "@/features/guestbook/guestbook.schema";
 import * as GuestbookService from "@/features/guestbook/guestbook.service";
 import { adminMiddleware } from "@/lib/middlewares";
-
-const AdminGetGuestbookInputSchema = z.object({
-  offset: z.number().optional(),
-  limit: z.number().optional(),
-  status: z.string().optional(),
-});
-
-const ModerateGuestbookInputSchema = z.object({
-  id: z.number(),
-  status: z.enum(["published", "deleted"]),
-});
 
 export const adminGetGuestbookEntriesFn = createServerFn()
   .middleware([adminMiddleware])

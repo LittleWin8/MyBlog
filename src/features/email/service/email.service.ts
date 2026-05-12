@@ -1,5 +1,5 @@
 import { type AuthType, WorkerMailer } from "worker-mailer";
-import * as ConfigService from "@/features/config/service/config.service";
+import * as ConfigService from "@/features/config/config.service";
 import * as EmailData from "@/features/email/data/email.data";
 import type { TestEmailConnectionInput } from "@/features/email/email.schema";
 import { verifyUnsubscribeToken } from "@/features/email/email.utils";

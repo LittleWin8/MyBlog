@@ -6,7 +6,7 @@ import { serializeKey } from "@/features/cache/cache.utils";
 import type { CacheNamespace } from "@/features/cache/types";
 import { DEFAULT_CONFIG } from "@/features/config/config.schema";
 import * as ConfigRepo from "@/features/config/data/config.data";
-import * as ConfigService from "@/features/config/service/config.service";
+import * as ConfigService from "@/features/config/config.service";
 import * as Invalidate from "@/lib/invalidate";
 
 describe("Infra Integration", () => {
