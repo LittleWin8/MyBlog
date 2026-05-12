@@ -151,7 +151,18 @@ export async function createComment(
 
   // Trigger AI moderation workflow only for non-admin users
   if (!isAdmin) {
-    await startCommentModerationWorkflow(context, { commentId: comment.id });
+    try {
+      await startCommentModerationWorkflow(context, { commentId: comment.id });
+    } catch (error) {
+      console.error(
+        JSON.stringify({
+          message: "failed to start comment moderation workflow",
+          commentId: comment.id,
+          error: error instanceof Error ? error.message : String(error),
+        }),
+      );
+      // Comment remains in "verifying" for manual admin review
+    }
   }
 
   // Send reply notification for admin replies (non-admin replies get notified via moderation workflow)

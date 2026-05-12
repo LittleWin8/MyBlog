@@ -129,7 +129,18 @@ export async function createEntry(
 
   // Trigger AI moderation workflow only for non-admin users
   if (!isAdmin) {
-    await startGuestbookModerationWorkflow(context, { entryId: entry.id });
+    try {
+      await startGuestbookModerationWorkflow(context, { entryId: entry.id });
+    } catch (error) {
+      console.error(
+        JSON.stringify({
+          message: "failed to start guestbook moderation workflow",
+          entryId: entry.id,
+          error: error instanceof Error ? error.message : String(error),
+        }),
+      );
+      // Entry remains in "verifying" for manual admin review
+    }
   }
 
   // Send reply notification for admin replies

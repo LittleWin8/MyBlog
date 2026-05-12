@@ -21,10 +21,10 @@ const PAGE_SIZE = 20;
 
 const searchSchema = z.object({
   status: z
-    .enum(["published", "verifying", "pending", "deleted", "ALL"])
+    .enum(["pending", "published", "deleted", "ALL"])
     .optional()
-    .default("published")
-    .catch("published"),
+    .default("pending")
+    .catch("pending"),
   page: z.number().optional().default(1).catch(1),
 });
 
@@ -120,7 +120,7 @@ function GuestbookAdminPage() {
   };
 
   const handleStatusChange = (
-    newStatus: "published" | "verifying" | "pending" | "deleted" | "ALL",
+    newStatus: "pending" | "published" | "deleted" | "ALL",
   ) => {
     navigate({ search: { status: newStatus, page: 1 } });
   };
@@ -130,12 +130,11 @@ function GuestbookAdminPage() {
   };
 
   const tabs: Array<{
-    key: "published" | "verifying" | "pending" | "deleted" | "ALL";
+    key: "pending" | "published" | "deleted" | "ALL";
     label: string;
   }> = [
-    { key: "published", label: m.guestbook_tab_published() },
-    { key: "verifying", label: m.guestbook_tab_verifying() },
     { key: "pending", label: m.guestbook_tab_pending() },
+    { key: "published", label: m.guestbook_tab_published() },
     { key: "deleted", label: m.guestbook_tab_deleted() },
     { key: "ALL", label: m.guestbook_tab_all() },
   ];

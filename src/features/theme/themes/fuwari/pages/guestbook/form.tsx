@@ -22,23 +22,27 @@ export function GuestbookForm() {
 
     setShowSuccess(false);
 
+    const savedContent = content.trim();
+    const savedNickname = nickname.trim();
+    setContent("");
+    setNickname("");
+
     try {
       if (isLoggedIn) {
-        await createEntry({ data: { content: content.trim() } });
+        await createEntry({ data: { content: savedContent } });
       } else {
         await createAnonymousEntry({
           data: {
-            content: content.trim(),
-            nickname: nickname.trim() || undefined,
+            content: savedContent,
+            nickname: savedNickname || undefined,
           },
         });
       }
-      setContent("");
-      setNickname("");
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3000);
     } catch {
-      // errors handled in hook
+      setContent(savedContent);
+      setNickname(savedNickname);
     }
   }
 

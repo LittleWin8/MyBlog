@@ -58,6 +58,9 @@ export function useGuestbook() {
         toast.success(m.guestbook_create_success());
       }
     },
+    onError: () => {
+      toast.error(m.guestbook_create_failed());
+    },
   });
 
   const createAnonymousEntryMutation = useMutation({
@@ -101,6 +104,9 @@ export function useGuestbook() {
       // Anonymous entries always go through moderation
       toast.success(m.guestbook_create_pending_success());
     },
+    onError: () => {
+      toast.error(m.guestbook_create_failed());
+    },
   });
 
   const deleteEntryMutation = useMutation({
@@ -133,6 +139,9 @@ export function useGuestbook() {
         exact: false,
       });
       toast.success(m.guestbook_delete_success());
+    },
+    onError: () => {
+      toast.error(m.guestbook_delete_failed());
     },
   });
 
