@@ -4,6 +4,7 @@ import theme from "@theme";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { AUTH_KEYS } from "@/features/auth/queries";
+import { featureConfigQuery } from "@/features/config/queries";
 import { getThemePreloadImages } from "@/features/theme/site-config.helpers";
 import { authClient } from "@/lib/auth/auth.client";
 import { getLogoutAuthErrorMessage } from "@/lib/auth/auth-errors";
@@ -11,8 +12,9 @@ import { CACHE_CONTROL } from "@/lib/constants";
 import { m } from "@/paraglide/messages";
 
 export const Route = createFileRoute("/_public")({
-  loader: ({ context }) => ({
+  loader: async ({ context }) => ({
     preloadImages: getThemePreloadImages(context.siteConfig),
+    feature: await context.queryClient.fetchQuery(featureConfigQuery),
   }),
   component: PublicLayout,
   headers: () => {
@@ -32,6 +34,7 @@ function PublicLayout() {
   const { data: session, isPending: isSessionPending } =
     authClient.useSession();
   const queryClient = useQueryClient();
+  const { feature } = Route.useLoaderData();
 
   const navOptions = [
     { label: m.nav_home(), to: "/" as const, id: "home" },
@@ -41,11 +44,15 @@ function PublicLayout() {
       to: "/friend-links" as const,
       id: "friend-links",
     },
-    {
-      label: m.nav_guestbook(),
-      to: "/guestbook" as const,
-      id: "guestbook",
-    },
+    ...(feature.guestbookEnabled !== false
+      ? [
+          {
+            label: m.nav_guestbook(),
+            to: "/guestbook" as const,
+            id: "guestbook",
+          },
+        ]
+      : []),
   ];
 
   const logout = async () => {
