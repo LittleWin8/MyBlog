@@ -2,4 +2,5 @@ import type { GuestbookWithReplyCount } from "@/features/guestbook/guestbook.sch
 
 export interface GuestbookPageProps {
   entries: Array<GuestbookWithReplyCount>;
+  currentUserId?: string | null;
 }

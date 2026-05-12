@@ -21,7 +21,7 @@ const PAGE_SIZE = 20;
 
 const searchSchema = z.object({
   status: z
-    .enum(["published", "deleted", "ALL"])
+    .enum(["published", "verifying", "pending", "deleted", "ALL"])
     .optional()
     .default("published")
     .catch("published"),
@@ -119,7 +119,9 @@ function GuestbookAdminPage() {
     setDeleteId(null);
   };
 
-  const handleStatusChange = (newStatus: "published" | "deleted" | "ALL") => {
+  const handleStatusChange = (
+    newStatus: "published" | "verifying" | "pending" | "deleted" | "ALL",
+  ) => {
     navigate({ search: { status: newStatus, page: 1 } });
   };
 
@@ -127,8 +129,13 @@ function GuestbookAdminPage() {
     navigate({ search: (prev) => ({ ...prev, page: newPage }) });
   };
 
-  const tabs: Array<{ key: "published" | "deleted" | "ALL"; label: string }> = [
+  const tabs: Array<{
+    key: "published" | "verifying" | "pending" | "deleted" | "ALL";
+    label: string;
+  }> = [
     { key: "published", label: m.guestbook_tab_published() },
+    { key: "verifying", label: m.guestbook_tab_verifying() },
+    { key: "pending", label: m.guestbook_tab_pending() },
     { key: "deleted", label: m.guestbook_tab_deleted() },
     { key: "ALL", label: m.guestbook_tab_all() },
   ];
@@ -434,11 +441,15 @@ function GuestbookAdminPage() {
 function StatusBadge({ status }: { status: string }) {
   const labels: Record<string, string> = {
     published: m.guestbook_status_published(),
+    verifying: m.guestbook_status_verifying(),
+    pending: m.guestbook_status_pending(),
     deleted: m.guestbook_status_deleted(),
   };
 
   const styles: Record<string, string> = {
     published: "text-foreground",
+    verifying: "text-blue-500",
+    pending: "text-yellow-500",
     deleted: "text-muted-foreground",
   };
 

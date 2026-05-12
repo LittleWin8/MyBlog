@@ -72,7 +72,7 @@ export const GuestbookModerationActions = ({
                 onClick={() => handleStatusChange("published")}
                 className="w-full flex items-center justify-between px-3 py-2 text-[10px] font-mono text-left hover:bg-muted/10 transition-colors text-foreground group"
               >
-                <span>{m.guestbook_action_restore()}</span>
+                <span>{m.guestbook_action_publish()}</span>
                 <RotateCcw className="h-3 w-3 opacity-0 group-hover:opacity-100" />
               </button>
             )}

@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import theme from "@theme";
 import { featureConfigQuery } from "@/features/config/queries";
 import { guestbookRootsQuery } from "@/features/guestbook/queries";
+import { authClient } from "@/lib/auth/auth.client";
 import { m } from "@/paraglide/messages";
 
 export const Route = createFileRoute("/_public/guestbook")({
@@ -41,5 +42,9 @@ function GuestbookRoute() {
 
 function GuestbookContent() {
   const { data } = useSuspenseQuery(guestbookRootsQuery());
-  return <theme.GuestbookPage entries={data.items} />;
+  const { data: session } = authClient.useSession();
+  const currentUserId = session?.user?.id ?? null;
+  return (
+    <theme.GuestbookPage entries={data.items} currentUserId={currentUserId} />
+  );
 }

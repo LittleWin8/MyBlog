@@ -1,9 +1,10 @@
+import { useGuestbook } from "@/features/guestbook/hooks/use-guestbook";
 import type { GuestbookPageProps } from "@/features/theme/contract/pages";
 import { formatTimeAgo } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
 import { GuestbookForm } from "./form";
 
-export function GuestbookPage({ entries }: GuestbookPageProps) {
+export function GuestbookPage({ entries, currentUserId }: GuestbookPageProps) {
   return (
     <div className="w-full max-w-3xl mx-auto pb-20 px-6 md:px-0">
       <header className="py-12 md:py-20 space-y-6">
@@ -30,7 +31,11 @@ export function GuestbookPage({ entries }: GuestbookPageProps) {
         ) : (
           <div className="space-y-6">
             {entries.map((entry) => (
-              <GuestbookEntryItem key={entry.id} entry={entry} />
+              <GuestbookEntryItem
+                key={entry.id}
+                entry={entry}
+                currentUserId={currentUserId}
+              />
             ))}
           </div>
         )}
@@ -41,13 +46,17 @@ export function GuestbookPage({ entries }: GuestbookPageProps) {
 
 function GuestbookEntryItem({
   entry,
+  currentUserId,
 }: {
   entry: GuestbookPageProps["entries"][number];
+  currentUserId?: string | null;
 }) {
+  const { deleteEntry, isDeleting } = useGuestbook();
   const displayName =
     entry.user?.name ?? entry.nickname ?? m.guestbook_anonymous();
   const avatar = entry.user?.image;
   const timeAgo = formatTimeAgo(entry.createdAt);
+  const canDelete = currentUserId && entry.userId === currentUserId;
 
   return (
     <div className="flex gap-4 group">
@@ -75,6 +84,15 @@ function GuestbookEntryItem({
           <span className="text-xs text-muted-foreground font-mono">
             {timeAgo}
           </span>
+          {canDelete && (
+            <button
+              onClick={() => deleteEntry({ data: { id: entry.id } })}
+              disabled={isDeleting}
+              className="text-[10px] font-mono text-muted-foreground/50 hover:text-red-500 transition-colors ml-auto opacity-0 group-hover:opacity-100"
+            >
+              [{m.guestbook_delete_own()}]
+            </button>
+          )}
         </div>
         <p className="text-sm text-foreground/80 leading-relaxed whitespace-pre-wrap break-words">
           {entry.content}
