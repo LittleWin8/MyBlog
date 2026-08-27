@@ -11,6 +11,7 @@ import { RegisterPage } from "./pages/auth/register";
 import { ResetPasswordPage } from "./pages/auth/reset-password";
 import { VerifyEmailPage } from "./pages/auth/verify-email";
 import { FriendLinksPage, FriendLinksPageSkeleton } from "./pages/friend-links";
+import { GuestbookPage, GuestbookPageSkeleton } from "./pages/guestbook";
 import { HomePage, HomePageSkeleton } from "./pages/home";
 import { PostPage, PostPageSkeleton } from "./pages/post";
 import { PostsPage, PostsPageSkeleton } from "./pages/posts";
@@ -37,6 +38,8 @@ export default {
   UserLayout,
   FriendLinksPage,
   FriendLinksPageSkeleton,
+  GuestbookPage,
+  GuestbookPageSkeleton,
   SearchPage,
   SubmitFriendLinkPage,
   LoginPage,

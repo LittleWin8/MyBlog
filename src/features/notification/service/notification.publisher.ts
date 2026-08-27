@@ -1,4 +1,4 @@
-import * as ConfigService from "@/features/config/service/config.service";
+import * as ConfigService from "@/features/config/config.service";
 import { createEmailMessageFromNotification } from "@/features/email/service/email-message.mapper";
 import type { NotificationEvent } from "@/features/notification/notification.schema";
 import {

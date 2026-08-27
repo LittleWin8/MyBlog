@@ -9,7 +9,7 @@ import {
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DEFAULT_CONFIG } from "@/features/config/config.schema";
 import * as ConfigRepo from "@/features/config/data/config.data";
-import * as ConfigService from "@/features/config/service/config.service";
+import * as ConfigService from "@/features/config/config.service";
 import * as FriendLinkService from "./friend-links.service";
 
 describe("FriendLinkService", () => {

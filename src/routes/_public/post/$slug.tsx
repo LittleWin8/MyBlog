@@ -3,7 +3,11 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import theme from "@theme";
 import { useEffect } from "react";
 import { z } from "zod";
-import { siteConfigQuery, siteDomainQuery } from "@/features/config/queries";
+import {
+  featureConfigQuery,
+  siteConfigQuery,
+  siteDomainQuery,
+} from "@/features/config/queries";
 import { recordPageViewFn } from "@/features/pageview/api/pageview.api";
 import { postBySlugQuery, relatedPostsQuery } from "@/features/posts/queries";
 import {
@@ -28,6 +32,7 @@ export const Route = createFileRoute("/_public/post/$slug")({
       context.queryClient.ensureQueryData(postBySlugQuery(params.slug)),
       context.queryClient.ensureQueryData(siteDomainQuery),
       context.queryClient.ensureQueryData(siteConfigQuery),
+      context.queryClient.ensureQueryData(featureConfigQuery),
     ]);
 
     // 2. Deferred: Related posts (prefetch only, don't await)

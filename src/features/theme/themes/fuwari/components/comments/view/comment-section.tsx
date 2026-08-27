@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { getRouteApi, Link } from "@tanstack/react-router";
 import type { JSONContent } from "@tiptap/react";
 import { LogIn } from "lucide-react";
@@ -8,6 +8,7 @@ import { Turnstile, useTurnstile } from "@/components/common/turnstile";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useComments } from "@/features/comments/hooks/use-comments";
 import { rootCommentsByPostIdInfiniteQuery } from "@/features/comments/queries";
+import { featureConfigQuery } from "@/features/config/queries";
 import { authClient } from "@/lib/auth/auth.client";
 import { m } from "@/paraglide/messages";
 import { FuwariCommentEditor } from "../editor/comment-editor";
@@ -22,6 +23,7 @@ interface FuwariCommentSectionProps {
 
 export function FuwariCommentSection({ postId }: FuwariCommentSectionProps) {
   const { data: session } = authClient.useSession();
+  const { data: feature } = useSuspenseQuery(featureConfigQuery);
   const { rootId, highlightCommentId } = routeApi.useSearch();
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery(
@@ -134,6 +136,16 @@ export function FuwariCommentSection({ postId }: FuwariCommentSectionProps) {
 
   if (isLoading || !data) {
     return <FuwariCommentSectionSkeleton />;
+  }
+
+  if (!feature.commentsEnabled) {
+    return (
+      <div className="py-12 text-center">
+        <p className="text-sm font-serif italic fuwari-text-30">
+          {m.feature_comments_disabled()}
+        </p>
+      </div>
+    );
   }
 
   return (

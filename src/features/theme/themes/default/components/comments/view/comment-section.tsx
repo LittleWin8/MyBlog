@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { getRouteApi, Link } from "@tanstack/react-router";
 import type { JSONContent } from "@tiptap/react";
 import { LogIn } from "lucide-react";
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import ConfirmationModal from "@/components/ui/confirmation-modal";
 import { useComments } from "@/features/comments/hooks/use-comments";
 import { rootCommentsByPostIdInfiniteQuery } from "@/features/comments/queries";
+import { featureConfigQuery } from "@/features/config/queries";
 import { authClient } from "@/lib/auth/auth.client";
 import { cn } from "@/lib/utils";
 import { m } from "@/paraglide/messages";
@@ -25,6 +26,7 @@ interface CommentSectionProps {
 
 export const CommentSection = ({ postId, className }: CommentSectionProps) => {
   const { data: session } = authClient.useSession();
+  const { data: feature } = useSuspenseQuery(featureConfigQuery);
   const { rootId, highlightCommentId } = routeApi.useSearch();
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery(
@@ -146,6 +148,21 @@ export const CommentSection = ({ postId, className }: CommentSectionProps) => {
 
   if (isLoading || !data) {
     return <CommentSectionSkeleton className={className} />;
+  }
+
+  if (!feature.commentsEnabled) {
+    return (
+      <section
+        className={cn(
+          "space-y-6 mt-24 pt-12 border-t border-border/20 animate-in fade-in duration-700",
+          className,
+        )}
+      >
+        <p className="text-center text-sm font-serif italic text-muted-foreground py-12">
+          {m.feature_comments_disabled()}
+        </p>
+      </section>
+    );
   }
 
   return (

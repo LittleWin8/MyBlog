@@ -2,6 +2,7 @@ import { Link, useRouteContext } from "@tanstack/react-router";
 import {
   resolveSocialHref,
   SOCIAL_PLATFORMS,
+  type SocialLink,
 } from "@/features/config/utils/social-platforms";
 import { m } from "@/paraglide/messages";
 
@@ -34,7 +35,7 @@ export function Profile() {
           {siteConfig.description}
         </div>
         <div className="flex flex-wrap gap-2 justify-center">
-          {siteConfig.social
+          {(siteConfig.social as SocialLink[])
             .filter((link) => link.url)
             .map((link, i) => {
               const preset =

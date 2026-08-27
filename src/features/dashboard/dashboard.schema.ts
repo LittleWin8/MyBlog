@@ -5,6 +5,7 @@ export const DashboardStatsSchema = z.object({
   publishedPosts: z.number(),
   drafts: z.number(),
   mediaSize: z.number(),
+  pendingGuestbook: z.number(),
 });
 
 export const ActivityLogItemSchema = z.object({

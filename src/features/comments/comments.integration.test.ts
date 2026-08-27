@@ -14,7 +14,7 @@ import { CommentModerationWorkflow } from "@/features/comments/workflows/comment
 import * as WorkflowHelpers from "@/features/comments/workflows/helpers";
 import { DEFAULT_CONFIG } from "@/features/config/config.schema";
 import * as ConfigRepo from "@/features/config/data/config.data";
-import * as ConfigService from "@/features/config/service/config.service";
+import * as ConfigService from "@/features/config/config.service";
 import * as EmailData from "@/features/email/data/email.data";
 import * as PostService from "@/features/posts/services/posts.service";
 import { CommentsTable } from "@/lib/db/schema";

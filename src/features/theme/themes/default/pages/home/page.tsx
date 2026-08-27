@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import {
   resolveSocialHref,
   SOCIAL_PLATFORMS,
+  type SocialLink,
 } from "@/features/config/utils/social-platforms";
 import { useViewCounts } from "@/features/pageview/queries";
 import type { HomePageProps } from "@/features/theme/contract/pages";
@@ -57,7 +58,7 @@ export function HomePage({ posts, pinnedPosts }: HomePageProps) {
         </header>
 
         <div className="flex items-center gap-6 text-muted-foreground">
-          {siteConfig.social
+          {(siteConfig.social as SocialLink[])
             .filter((link) => link.url)
             .map((link, i) => {
               const preset =

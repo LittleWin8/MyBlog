@@ -11,6 +11,9 @@ export const WEBHOOK_EVENT_LABELS: Record<
   "comment.admin_pending_review": m.settings_webhook_event_comment_pending(),
   "comment.reply_to_admin_published": m.settings_webhook_event_comment_reply(),
   "friend_link.submitted": m.settings_webhook_event_friend_link(),
+  "guestbook.admin_new_entry": m.settings_webhook_event_guestbook_new(),
+  "guestbook.admin_pending_review":
+    m.settings_webhook_event_guestbook_pending(),
 };
 
 export function createWebhookEndpoint() {

@@ -135,14 +135,7 @@ export function createTestContext(
     ReturnType<Env["POST_AUTO_SNAPSHOT_WORKFLOW"]["createBatch"]>
   >);
 
-  vi.spyOn(context.env.QUEUE, "send").mockResolvedValue({
-    metadata: {
-      metrics: {
-        backlogBytes: 0,
-        backlogCount: 0,
-      },
-    },
-  });
+  vi.spyOn(context.env.QUEUE, "send").mockResolvedValue(undefined);
 
   vi.spyOn(context.env.SCHEDULED_PUBLISH_WORKFLOW, "get").mockResolvedValue({
     ...mockWorkflowInstance,
@@ -161,6 +154,21 @@ export function createTestContext(
     "createBatch",
   ).mockResolvedValue([mockWorkflowInstance] as unknown as Awaited<
     ReturnType<Env["SCHEDULED_PUBLISH_WORKFLOW"]["createBatch"]>
+  >);
+
+  vi.spyOn(
+    context.env.GUESTBOOK_MODERATION_WORKFLOW,
+    "create",
+  ).mockResolvedValue(
+    mockWorkflowInstance as unknown as Awaited<
+      ReturnType<Env["GUESTBOOK_MODERATION_WORKFLOW"]["create"]>
+    >,
+  );
+  vi.spyOn(context.env.GUESTBOOK_MODERATION_WORKFLOW, "get").mockResolvedValue({
+    ...mockWorkflowInstance,
+    terminate: vi.fn(),
+  } as unknown as Awaited<
+    ReturnType<Env["GUESTBOOK_MODERATION_WORKFLOW"]["get"]>
   >);
 
   return context;

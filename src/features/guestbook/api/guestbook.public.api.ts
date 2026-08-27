@@ -1,0 +1,92 @@
+import { createServerFn } from "@tanstack/react-start";
+import {
+  CreateGuestbookInputSchema,
+  DeleteGuestbookInputSchema,
+  GetGuestbookInputSchema,
+  GetMyEntriesInputSchema,
+  GetRepliesInputSchema,
+} from "@/features/guestbook/guestbook.schema";
+import * as GuestbookService from "@/features/guestbook/guestbook.service";
+import {
+  authMiddleware,
+  createRateLimitMiddleware,
+  sessionMiddleware,
+  turnstileMiddleware,
+} from "@/lib/middlewares";
+
+export const getGuestbookEntriesFn = createServerFn()
+  .middleware([sessionMiddleware])
+  .inputValidator(GetGuestbookInputSchema)
+  .handler(async ({ data, context }) => {
+    const viewerId = context.session?.user?.id;
+    return await GuestbookService.getRootEntries(context, {
+      ...data,
+      viewerId,
+    });
+  });
+
+export const getGuestbookRepliesFn = createServerFn()
+  .middleware([sessionMiddleware])
+  .inputValidator(GetRepliesInputSchema)
+  .handler(async ({ data, context }) => {
+    const viewerId = context.session?.user?.id;
+    return await GuestbookService.getRepliesByRootId(context, {
+      ...data,
+      viewerId,
+    });
+  });
+
+export const createGuestbookEntryFn = createServerFn({ method: "POST" })
+  .middleware([
+    createRateLimitMiddleware({
+      capacity: 10,
+      interval: "1m",
+      key: "guestbook:create",
+    }),
+    turnstileMiddleware,
+    sessionMiddleware,
+  ])
+  .inputValidator(CreateGuestbookInputSchema)
+  .handler(async ({ data, context }) => {
+    return await GuestbookService.createEntry(context, data);
+  });
+
+export const createAnonymousGuestbookEntryFn = createServerFn({
+  method: "POST",
+})
+  .middleware([
+    createRateLimitMiddleware({
+      capacity: 5,
+      interval: "1m",
+      key: "guestbook:create-anon",
+    }),
+    turnstileMiddleware,
+  ])
+  .inputValidator(CreateGuestbookInputSchema)
+  .handler(async ({ data, context }) => {
+    return await GuestbookService.createEntry(
+      { ...context, session: null },
+      data,
+    );
+  });
+
+export const deleteGuestbookEntryFn = createServerFn({ method: "POST" })
+  .middleware([
+    createRateLimitMiddleware({
+      capacity: 10,
+      interval: "1m",
+      key: "guestbook:delete",
+    }),
+    authMiddleware,
+  ])
+  .inputValidator(DeleteGuestbookInputSchema)
+  .handler(async ({ data, context }) => {
+    return await GuestbookService.deleteEntry(context, data);
+  });
+
+export const getMyGuestbookEntriesFn = createServerFn()
+  .middleware([authMiddleware])
+  .inputValidator(GetMyEntriesInputSchema)
+  .handler(async ({ data, context }) => {
+    return await GuestbookService.getMyEntries(context, data);
+  });

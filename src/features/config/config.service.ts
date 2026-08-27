@@ -10,6 +10,7 @@ import * as ConfigRepo from "@/features/config/data/config.data";
 import { FullSiteConfigSchema } from "@/features/config/site-config.schema";
 import type { SocialLink } from "@/features/config/utils/social-platforms";
 import * as Storage from "@/features/media/data/media.storage";
+import { ok } from "@/lib/errors";
 import { purgeSiteCDNCache } from "@/lib/invalidate";
 
 const DEFAULT_SMTP_PORT = 465;
@@ -60,6 +61,10 @@ export function resolveSystemConfig(
         config?.notification?.webhooks ?? DEFAULT_CONFIG.notification?.webhooks,
     },
     site: resolveSiteConfig(config),
+    feature: {
+      ...DEFAULT_CONFIG.feature,
+      ...config?.feature,
+    },
   };
 }
 
@@ -194,13 +199,13 @@ export async function updateSystemConfig(
     await purgeSiteCDNCache(context.env);
   }
 
-  return { success: true };
+  return ok({ success: true });
 }
 
 export async function uploadSiteAsset(
   context: { env: Env },
   input: { file: File; assetPath: string },
-): Promise<{ url: string }> {
+) {
   const { url } = await Storage.putSiteAsset(
     context.env,
     input.file,
@@ -213,5 +218,5 @@ export async function uploadSiteAsset(
     ? `${url}?original=true&v=${timestamp}`
     : `${url}?v=${timestamp}`;
 
-  return { url: finalUrl };
+  return ok({ url: finalUrl });
 }

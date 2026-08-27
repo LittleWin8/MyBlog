@@ -2,6 +2,7 @@ import { ClientOnly, Link, useRouteContext } from "@tanstack/react-router";
 import {
   resolveSocialHref,
   SOCIAL_PLATFORMS,
+  type SocialLink,
 } from "@/features/config/utils/social-platforms";
 import type { NavOption } from "@/features/theme/contract/layouts";
 import { m } from "@/paraglide/messages";
@@ -42,7 +43,7 @@ export function Footer({ navOptions }: FooterProps) {
               {option.label}
             </Link>
           ))}
-          {siteConfig.social
+          {(siteConfig.social as SocialLink[])
             .filter((link) => link.url)
             .map((link, i) => {
               const href = resolveSocialHref(link.platform, link.url);

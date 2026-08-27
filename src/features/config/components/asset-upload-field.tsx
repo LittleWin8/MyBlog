@@ -53,7 +53,11 @@ export function AssetUploadField({
       return uploadSiteAssetFn({ data: formData });
     },
     onSuccess: (result) => {
-      setValue(name, result.url, { shouldDirty: true });
+      if (result.error) {
+        toast.error(m.settings_asset_upload_fail());
+        return;
+      }
+      setValue(name, result.data.url, { shouldDirty: true });
       toast.success(m.settings_asset_upload_success());
     },
     onError: (err) => {

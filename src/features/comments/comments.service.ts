@@ -9,6 +9,8 @@ import type {
 } from "@/features/comments/comments.schema";
 import * as CommentRepo from "@/features/comments/data/comments.data";
 import { sendReplyNotification } from "@/features/comments/workflows/helpers";
+import { resolveSystemConfig } from "@/features/config/config.service";
+import * as ConfigRepo from "@/features/config/data/config.data";
 import { publishNotificationEvent } from "@/features/notification/service/notification.publisher";
 import * as PostService from "@/features/posts/services/posts.service";
 import { convertToPlainText } from "@/features/posts/utils/content";
@@ -81,6 +83,13 @@ export async function createComment(
   context: AuthContext & { executionCtx: ExecutionContext },
   data: CreateCommentInput,
 ) {
+  // Check feature toggle
+  const rawConfig = await ConfigRepo.getSystemConfig(context.db);
+  const config = resolveSystemConfig(rawConfig);
+  if (config.feature?.commentsEnabled === false) {
+    return err({ reason: "FEATURE_DISABLED" });
+  }
+
   // Validation: ensure 2-level structure
   let rootId: number | null = null;
   let replyToCommentId: number | null = null;
@@ -142,7 +151,18 @@ export async function createComment(
 
   // Trigger AI moderation workflow only for non-admin users
   if (!isAdmin) {
-    await startCommentModerationWorkflow(context, { commentId: comment.id });
+    try {
+      await startCommentModerationWorkflow(context, { commentId: comment.id });
+    } catch (error) {
+      console.error(
+        JSON.stringify({
+          message: "failed to start comment moderation workflow",
+          commentId: comment.id,
+          error: error instanceof Error ? error.message : String(error),
+        }),
+      );
+      // Comment remains in "verifying" for manual admin review
+    }
   }
 
   // Send reply notification for admin replies (non-admin replies get notified via moderation workflow)

@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { ErrorPage } from "@/components/common/error-page";
 import { AUTH_KEYS, sessionQuery } from "@/features/auth/queries";
+import { featureConfigQuery } from "@/features/config/queries";
 import { authClient } from "@/lib/auth/auth.client";
 import { getLogoutAuthErrorMessage } from "@/lib/auth/auth-errors";
 import { CACHE_CONTROL } from "@/lib/constants";
@@ -12,8 +13,11 @@ import { m } from "@/paraglide/messages";
 
 export const Route = createFileRoute("/_user")({
   loader: async ({ context }) => {
-    const session = await context.queryClient.fetchQuery(sessionQuery);
-    return { session };
+    const [session, feature] = await Promise.all([
+      context.queryClient.fetchQuery(sessionQuery),
+      context.queryClient.fetchQuery(featureConfigQuery),
+    ]);
+    return { session, feature };
   },
   component: UserLayout,
   errorComponent: ({ error }) => <ErrorPage error={error} />,
@@ -23,7 +27,7 @@ export const Route = createFileRoute("/_user")({
 });
 
 function UserLayout() {
-  const { session } = Route.useLoaderData();
+  const { session, feature } = Route.useLoaderData();
   const navigate = useNavigate();
   const { isPending: isSessionPending } = authClient.useSession();
   const queryClient = useQueryClient();
@@ -36,6 +40,15 @@ function UserLayout() {
       to: "/friend-links" as const,
       id: "friend-links",
     },
+    ...(feature.guestbookEnabled !== false
+      ? [
+          {
+            label: m.nav_guestbook(),
+            to: "/guestbook" as const,
+            id: "guestbook",
+          },
+        ]
+      : []),
   ];
 
   const logout = async () => {

@@ -141,6 +141,58 @@ export function createEmailMessageFromNotification(
           }),
         ),
       };
+    case "guestbook.admin_new_entry":
+      return {
+        to: event.data.to,
+        subject: m.email_guestbook_admin_new_subject(
+          { submitterName: event.data.submitterName },
+          { locale },
+        ),
+        html: renderToStaticMarkup(
+          AdminNotificationEmail({
+            locale,
+            mode: "guestbook-new",
+            commenterName: event.data.submitterName,
+            commentPreview: event.data.entryPreview,
+            commentUrl: event.data.entryUrl,
+          }),
+        ),
+      };
+    case "guestbook.admin_pending_review":
+      return {
+        to: event.data.to,
+        subject: m.email_guestbook_admin_pending_subject(
+          { submitterName: event.data.submitterName },
+          { locale },
+        ),
+        html: renderToStaticMarkup(
+          AdminNotificationEmail({
+            locale,
+            mode: "guestbook-pending",
+            commenterName: event.data.submitterName,
+            commentPreview: event.data.entryPreview,
+            commentUrl: event.data.reviewUrl,
+          }),
+        ),
+      };
+    case "guestbook.reply_to_admin_published":
+    case "guestbook.reply_to_user_published":
+      return {
+        to: event.data.to,
+        subject: m.email_guestbook_reply_subject(
+          { replierName: event.data.replierName },
+          { locale },
+        ),
+        html: renderToStaticMarkup(
+          ReplyNotificationEmail({
+            locale,
+            postTitle: m.email_guestbook_reply_post_title({}, { locale }),
+            replierName: event.data.replierName,
+            replyPreview: event.data.replyPreview,
+            commentUrl: event.data.entryUrl,
+          }),
+        ),
+      };
     default: {
       event satisfies never;
       throw new Error("Unknown notification event");

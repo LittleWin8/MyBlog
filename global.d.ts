@@ -43,6 +43,10 @@ declare global {
     locale?: "zh" | "en";
   }
 
+  interface GuestbookModerationWorkflowParams {
+    entryId: number;
+  }
+
   interface Env extends Cloudflare.Env {
     POST_PROCESS_WORKFLOW: Workflow<PostProcessWorkflowParams>;
     POST_AUTO_SNAPSHOT_WORKFLOW: Workflow<PostAutoSnapshotWorkflowParams>;
@@ -50,6 +54,7 @@ declare global {
     SCHEDULED_PUBLISH_WORKFLOW: Workflow<ScheduledPublishWorkflowParams>;
     EXPORT_WORKFLOW: Workflow<ExportWorkflowParams>;
     IMPORT_WORKFLOW: Workflow<ImportWorkflowParams>;
+    GUESTBOOK_MODERATION_WORKFLOW: Workflow<GuestbookModerationWorkflowParams>;
     OAUTH_PROVIDER?: OAuthHelpers;
     QUEUE: Queue<QueueMessage>;
   }

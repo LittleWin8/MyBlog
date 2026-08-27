@@ -1,7 +1,7 @@
 import { and, desc, eq, lte } from "drizzle-orm";
 import { Feed } from "feed";
 import type { SiteConfig } from "@/features/config/config.schema";
-import * as ConfigService from "@/features/config/service/config.service";
+import * as ConfigService from "@/features/config/config.service";
 import { convertToPlainText } from "@/features/posts/utils/content";
 import { getDb } from "@/lib/db";
 import { PostsTable } from "@/lib/db/schema";

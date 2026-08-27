@@ -8,7 +8,7 @@ interface ReplyNotificationEmailProps {
   postTitle: string;
   replierName: string;
   replyPreview: string;
-  unsubscribeUrl: string;
+  unsubscribeUrl?: string;
 }
 
 export const ReplyNotificationEmail = ({
@@ -71,26 +71,28 @@ export const ReplyNotificationEmail = ({
           {m.email_comment_reply_action({}, { locale })}
         </a>
       </div>
-      <div
-        style={{
-          paddingTop: "20px",
-          borderTop: "1px solid #f9f9f9",
-        }}
-      >
-        <p style={{ fontSize: "12px", color: "#999", margin: "0" }}>
-          {m.email_comment_reply_unsubscribe_hint({}, { locale })}
-          <a
-            href={unsubscribeUrl}
-            style={{
-              color: "#999",
-              textDecoration: "underline",
-              marginLeft: "4px",
-            }}
-          >
-            {m.email_comment_reply_unsubscribe_action({}, { locale })}
-          </a>
-        </p>
-      </div>
+      {unsubscribeUrl && (
+        <div
+          style={{
+            paddingTop: "20px",
+            borderTop: "1px solid #f9f9f9",
+          }}
+        >
+          <p style={{ fontSize: "12px", color: "#999", margin: "0" }}>
+            {m.email_comment_reply_unsubscribe_hint({}, { locale })}
+            <a
+              href={unsubscribeUrl}
+              style={{
+                color: "#999",
+                textDecoration: "underline",
+                marginLeft: "4px",
+              }}
+            >
+              {m.email_comment_reply_unsubscribe_action({}, { locale })}
+            </a>
+          </p>
+        </div>
+      )}
     </EmailLayout>
   );
 };

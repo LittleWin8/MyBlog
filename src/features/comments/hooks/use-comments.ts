@@ -29,6 +29,9 @@ export function useComments(postId?: number) {
           case "ROOT_COMMENT_CANNOT_HAVE_REPLY_TO":
             toast.error(m.comments_toast_structure_error());
             return;
+          case "FEATURE_DISABLED":
+            toast.error(m.feature_comments_disabled());
+            return;
           default: {
             reason satisfies never;
             toast.error(m.comments_toast_unknown_error());

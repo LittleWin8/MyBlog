@@ -7,6 +7,7 @@ import {
   LayoutTemplate,
   Loader2,
   Mail,
+  ToggleLeft,
   Webhook,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -14,6 +15,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FeatureSettingsSection } from "@/features/config/components/feature-settings-section";
 import { MaintenanceSection } from "@/features/config/components/maintenance-section";
 import { SectionSkeleton } from "@/features/config/components/settings-skeleton";
 import { SiteSettingsSection } from "@/features/config/components/site-settings-section";
@@ -71,6 +73,11 @@ function RouteComponent() {
       value: "maintenance",
       icon: Hammer,
       label: m.settings_tab_maintenance(),
+    },
+    {
+      value: "feature",
+      icon: ToggleLeft,
+      label: m.settings_tab_feature(),
     },
     {
       value: "integrations",
@@ -273,6 +280,18 @@ function RouteComponent() {
                 </p>
               </div>
               <MaintenanceSection />
+            </TabsContent>
+
+            <TabsContent value="feature" className="mt-0 space-y-10">
+              <div className="space-y-2 pb-6 border-b border-border/30">
+                <h2 className="text-2xl font-serif font-medium tracking-tight">
+                  {m.settings_feature_title()}
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  {m.settings_feature_desc()}
+                </p>
+              </div>
+              <FeatureSettingsSection />
             </TabsContent>
           </div>
         </Tabs>

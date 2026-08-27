@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import * as ConfigService from "@/features/config/service/config.service";
+import * as ConfigService from "@/features/config/config.service";
 import { TestEmailConnectionSchema } from "@/features/email/email.schema";
 import * as EmailService from "@/features/email/service/email.service";
 import { EMAIL_UNSUBSCRIBE_TYPES } from "@/lib/db/schema";
